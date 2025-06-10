@@ -1,6 +1,16 @@
 // SALON TEMPLATES - COMPLETE VERSION WITH ALL TREATMENTS
 console.log('🏥 Salon Templates Complete - gestartet');
 
+// Verhindere mehrfaches Laden
+if (window.salonTemplatesLoaded) {
+  console.log('Script bereits geladen - starte direkt');
+  if (typeof injectButton === 'function') {
+    injectButton();
+  }
+  return;
+}
+window.salonTemplatesLoaded = true;
+
 let isModalOpen = false;
 let currentTemplates = {};
 
@@ -187,8 +197,21 @@ function getDefaultTemplates() {
 function injectButton() {
   if (document.getElementById('salon-templates-btn') || isModalOpen) return;
   
-  const textarea = document.querySelector('#note_area');
-  if (!textarea) return;
+  // Verschiedene Selektoren versuchen
+  const textarea = document.querySelector('#note_area') || 
+                   document.querySelector('textarea[name*="note"]') ||
+                   document.querySelector('textarea[placeholder*="notiz"]') ||
+                   document.querySelector('textarea[placeholder*="Notiz"]') ||
+                   document.querySelector('textarea') ||
+                   document.querySelector('input[type="text"][name*="note"]');
+                   
+  if (!textarea) {
+    console.log('🔍 Kein Notizfeld gefunden. Versuche es in 2 Sekunden nochmal...');
+    setTimeout(injectButton, 2000);
+    return;
+  }
+  
+  console.log('✅ Notizfeld gefunden:', textarea);
   
   const button = document.createElement('button');
   button.id = 'salon-templates-btn';
@@ -595,7 +618,12 @@ function insertIntoTextarea() {
   }
   
   const previewText = document.getElementById('preview-text');
-  const textarea = document.querySelector('#note_area');
+  const textarea = document.querySelector('#note_area') || 
+                   document.querySelector('textarea[name*="note"]') ||
+                   document.querySelector('textarea[placeholder*="notiz"]') ||
+                   document.querySelector('textarea[placeholder*="Notiz"]') ||
+                   document.querySelector('textarea') ||
+                   document.querySelector('input[type="text"][name*="note"]');
   
   if (!textarea) {
     showNotification('❌ Notizfeld nicht gefunden', '#dc3545');
