@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "Salon Pro Templates - Advanced",
+  "version": "2.0",
+  "description": "Erweiterte Behandlungsnotizen mit Admin-Panel und individueller Anpassung",
+  
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
+  
+  "host_permissions": [
+    "*://salonkee.at/*"
+  ],
+  
+  "content_scripts": [
+    {
+      "matches": ["*://salonkee.at/*"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Salon Templates Admin"
+  },
+  
+  "options_page": "options.html"
+}
