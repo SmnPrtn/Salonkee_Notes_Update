@@ -1,35 +1,15 @@
 // SALON TEMPLATES - COMPLETE VERSION WITH ALL TREATMENTS
 console.log('🏥 Salon Templates Complete - gestartet');
 
-// Verhindere mehrfaches Laden
-if (window.salonTemplatesLoaded) {
-  console.log('Script bereits geladen - starte direkt');
-  if (typeof injectButton === 'function') {
-    injectButton();
-  }
-  return;
-}
-window.salonTemplatesLoaded = true;
-
 let isModalOpen = false;
 let currentTemplates = {};
 
-// Verhindere mehrfaches Laden
-if (window.salonTemplatesLoaded) {
-  console.log('Script bereits geladen - starte direkt');
-  if (typeof injectButton === 'function') {
-    injectButton();
-  }
-  return;
-}
-window.salonTemplatesLoaded = true;
-
-let isModalOpen = false;
-let currentTemplates = {};
-
-// Safari-kompatibles Storage (statt chrome.storage.local)
-function loadTemplates() {
-  currentTemplates = getDefaultTemplates();
+// STORAGE LADEN
+chrome.storage.local.get(['customTemplates', 'settings'], (result) => {
+  currentTemplates = {
+    ...getDefaultTemplates(),
+    ...(result.customTemplates || {})
+  };
   
   // Button nach DOM-Load hinzufügen
   if (document.readyState === 'loading') {
@@ -37,10 +17,7 @@ function loadTemplates() {
   } else {
     injectButton();
   }
-}
-
-// Starte direkt (ohne Chrome Storage)
-loadTemplates();
+});
 
 // ALLE STANDARD TEMPLATES
 function getDefaultTemplates() {
