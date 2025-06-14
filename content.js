@@ -561,55 +561,6 @@ function updatePreview() {
       previewSection.style.display = 'none';
     }
     
-  } else if (select.value === 'forma') {
-    // FORMA HEADER MIT UNTERÜBERSCHRIFT
-    const zusatzinfo = document.getElementById('zusatzinfo').value.trim();
-    let result;
-    
-    if (zusatzinfo) {
-      result = `Forma - ${zusatzinfo} - ${dateToUse}\n`;
-    } else {
-      result = `Forma Thermolifting - ${dateToUse}\n`;
-    }
-    
-    // FORMA ZONEN DURCHGEHEN
-    let hasContent = false;
-    template.zones.forEach(zone => {
-      const formaInput = document.querySelector(`.forma-input[data-zone="${zone}"]`);
-      const anmerkungenInput = document.querySelector(`.forma-anmerkungen-input[data-zone="${zone}"]`);
-      
-      const intensitaet = formaInput ? formaInput.value.trim() : '';
-      const anmerkungen = anmerkungenInput ? anmerkungenInput.value.trim() : '';
-      
-      if (intensitaet || anmerkungen) {
-        result += `• ${zone}:`;
-        if (intensitaet) result += ` ${intensitaet}`;
-        if (anmerkungen) result += ` (${anmerkungen})`;
-        result += `\n`;
-        hasContent = true;
-      }
-    });
-    
-    // FORMA STANDARD-FELDER
-    const fields = document.querySelectorAll('[data-field]');
-    fields.forEach((field, index) => {
-      const value = field.value.trim();
-      if (value) {
-        const fieldName = template.fields[index].name;
-        result += `• ${fieldName}: ${value}\n`;
-        hasContent = true;
-      }
-    });
-    
-    // TRENNLINIE AM ENDE
-    if (zusatzinfo || hasContent) {
-      result += `${'='.repeat(50)}\n`;
-      previewText.textContent = result;
-      previewSection.style.display = 'block';
-    } else {
-      previewSection.style.display = 'none';
-    }
-    
   } else {
     // STANDARD TEMPLATES
     const zusatzinfo = document.getElementById('zusatzinfo').value.trim();
@@ -727,17 +678,6 @@ function validateRequiredFields() {
     
     if (!kostenpunkt?.value.trim()) emptyRequiredFields.push('Kostenpunkt');
     if (!mitarbeiterin?.value.trim()) emptyRequiredFields.push('Behandelnde Mitarbeiterin');
-  } else if (select.value === 'forma') {
-    // Forma-spezifische Pflichtfelder (aus fields)
-    const template = currentTemplates[select.value];
-    template.fields.forEach((field, index) => {
-      if (field.required) {
-        const fieldElement = document.querySelector(`[data-field="${index}"]`);
-        if (!fieldElement?.value.trim()) {
-          emptyRequiredFields.push(field.name);
-        }
-      }
-    });
   } else {
     // Standard-Template Pflichtfelder
     const template = currentTemplates[select.value];
