@@ -116,18 +116,13 @@ function getDefaultTemplates() {
       name: 'Forma Thermolifting',
       icon: '🔥',
       zones: [
-        'Gesicht komplett',
-        'Stirn', 
-        'Wangen',
-        'Kinn/Jawline',
+        'Gesicht',
         'Hals',
         'Dekolleté',
-        'Bauch',
-        'Oberschenkel', 
-        'Unterschenkel',
-        'Arme',
-        'Rücken',
-        'Brust'
+        'Handrücken',
+        'Unterseite der Oberarme',
+        'Unterbauch',
+        'Kniebereich'
       ],
       fields: [
         { name: 'Verträglichkeit', type: 'select', options: ['Sehr gut', 'Gut', 'Empfindlich'] },
@@ -429,6 +424,65 @@ function loadTemplateContent() {
       </div>
     `;
     
+  } else if (select.value === 'forma') {
+    // FORMA SPEZIELL - NEUE ZONEN UND RADIOFREQUENZ/TEMPERATUR
+    container.innerHTML = `
+      <div style="margin-bottom: 20px;">
+        <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #333;">Zusatzinfo:</label>
+        <input type="text" id="zusatzinfo" placeholder="z.B. 'Kurbehandlung 3/6'" 
+               style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; box-sizing: border-box;">
+      </div>
+      
+      <div style="margin-bottom: 15px;">
+        <h4 style="margin: 0 0 15px 0; color: #667eea; font-size: 16px; display: flex; align-items: center;">
+          🔥 Behandelte Zonen
+        </h4>
+        <div id="zones-container">
+          ${template.zones.map(zone => `
+            <div class="zone-item" style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; margin-bottom: 12px; padding: 15px;">
+              <h5 style="margin: 0 0 12px 0; color: #333; font-size: 14px; font-weight: 600; border-bottom: 1px solid #ddd; padding-bottom: 8px;">${zone}:</h5>
+              <input type="text" placeholder="z.B. 40% / 42°C oder Level 6 / 43°C" class="forma-input" data-zone="${zone}"
+                     style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; box-sizing: border-box;">
+            </div>
+          `).join('')}
+        </div>
+      </div>
+      
+      <div style="margin-bottom: 15px;">
+        <h4 style="margin: 0 0 15px 0; color: #667eea; font-size: 16px;">📋 Weitere Angaben</h4>
+        ${template.fields.map((field, index) => {
+          const requiredLabel = field.required ? ' <span style="color: red;">*</span>' : '';
+          const requiredAttr = field.required ? ' required' : '';
+          
+          if (field.type === 'select') {
+            return `
+              <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 6px; font-weight: 500; color: #333; font-size: 14px;">${field.name}:${requiredLabel}</label>
+                <select data-field="${index}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;"${requiredAttr}>
+                  <option value="">-- Auswählen --</option>
+                  ${field.options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+                </select>
+              </div>
+            `;
+          } else if (field.type === 'textarea') {
+            return `
+              <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 6px; font-weight: 500; color: #333; font-size: 14px;">${field.name}:${requiredLabel}</label>
+                <textarea data-field="${index}" placeholder="${field.placeholder}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; min-height: 60px; resize: vertical; box-sizing: border-box;"${requiredAttr}></textarea>
+              </div>
+            `;
+          } else {
+            return `
+              <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 6px; font-weight: 500; color: #333; font-size: 14px;">${field.name}:${requiredLabel}</label>
+                <input type="${field.type}" data-field="${index}" placeholder="${field.placeholder}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; box-sizing: border-box;"${requiredAttr}>
+              </div>
+            `;
+          }
+        }).join('')}
+      </div>
+    `;
+    
   } else {
     // ANDERE TEMPLATES (Standard-Felder)
     container.innerHTML = `
@@ -572,20 +626,14 @@ function updatePreview() {
       result = `Forma Thermolifting - ${dateToUse}\n`;
     }
     
-    // FORMA ZONEN DURCHGEHEN
+    // FORMA ZONEN DURCHGEHEN (Radiofrequenz/Temperatur)
     let hasContent = false;
     template.zones.forEach(zone => {
       const formaInput = document.querySelector(`.forma-input[data-zone="${zone}"]`);
-      const anmerkungenInput = document.querySelector(`.forma-anmerkungen-input[data-zone="${zone}"]`);
+      const werte = formaInput ? formaInput.value.trim() : '';
       
-      const intensitaet = formaInput ? formaInput.value.trim() : '';
-      const anmerkungen = anmerkungenInput ? anmerkungenInput.value.trim() : '';
-      
-      if (intensitaet || anmerkungen) {
-        result += `• ${zone}:`;
-        if (intensitaet) result += ` ${intensitaet}`;
-        if (anmerkungen) result += ` (${anmerkungen})`;
-        result += `\n`;
+      if (werte) {
+        result += `• ${zone}: ${werte}\n`;
         hasContent = true;
       }
     });
