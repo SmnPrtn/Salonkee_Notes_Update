@@ -358,9 +358,9 @@ function renderTemplatesList() {
                 </div>
               </div>
               <div class="template-actions">
-                <button class="btn btn-outline" onclick="editTemplate('${key}')" title="Bearbeiten">✏️</button>
-                <button class="btn btn-outline" onclick="duplicateTemplate('${key}')" title="Duplizieren">📋</button>
-                ${!isDefaultTemplate(key) ? `<button class="btn btn-danger" onclick="deleteTemplate('${key}')" title="Löschen">🗑️</button>` : ''}
+                <button class="btn btn-outline edit-template-btn" data-template-key="${key}" title="Bearbeiten">✏️</button>
+                <button class="btn btn-outline duplicate-template-btn" data-template-key="${key}" title="Duplizieren">📋</button>
+                ${!isDefaultTemplate(key) ? `<button class="btn btn-danger delete-template-btn" data-template-key="${key}" title="Löschen">🗑️</button>` : ''}
               </div>
             </div>
           `).join('')}
@@ -370,6 +370,19 @@ function renderTemplatesList() {
   });
   
   container.innerHTML = html;
+  
+  // Event Listeners für Template-Buttons hinzufügen
+  container.querySelectorAll('.edit-template-btn').forEach(btn => {
+    btn.addEventListener('click', () => editTemplate(btn.dataset.templateKey));
+  });
+  
+  container.querySelectorAll('.duplicate-template-btn').forEach(btn => {
+    btn.addEventListener('click', () => duplicateTemplate(btn.dataset.templateKey));
+  });
+  
+  container.querySelectorAll('.delete-template-btn').forEach(btn => {
+    btn.addEventListener('click', () => deleteTemplate(btn.dataset.templateKey));
+  });
 }
 
 // HILFSFUNKTIONEN
@@ -416,43 +429,57 @@ function setupEventListeners() {
   const saveTemplateBtn = document.getElementById('save-template-btn');
   const clearFormBtn = document.getElementById('clear-form-btn');
   
-  if (addFieldBtn) addFieldBtn.onclick = addField;
-  if (saveTemplateBtn) saveTemplateBtn.onclick = saveTemplate;
-  if (clearFormBtn) clearFormBtn.onclick = clearForm;
+  if (addFieldBtn) addFieldBtn.addEventListener('click', addField);
+  if (saveTemplateBtn) saveTemplateBtn.addEventListener('click', saveTemplate);
+  if (clearFormBtn) clearFormBtn.addEventListener('click', clearForm);
   
   // Import/Export
   const exportBtn = document.getElementById('export-btn');
   const importBtn = document.getElementById('import-btn');
   const importFile = document.getElementById('import-file');
   
-  if (exportBtn) exportBtn.onclick = exportTemplates;
-  if (importBtn) importBtn.onclick = () => importFile.click();
-  if (importFile) importFile.onchange = importTemplates;
+  if (exportBtn) exportBtn.addEventListener('click', exportTemplates);
+  if (importBtn) importBtn.addEventListener('click', () => importFile.click());
+  if (importFile) importFile.addEventListener('change', importTemplates);
   
   // Settings
   const autoPreview = document.getElementById('auto-preview');
   const autoCopy = document.getElementById('auto-copy');
   const dateFormat = document.getElementById('date-format');
   
-  if (autoPreview) autoPreview.onchange = saveSettings;
-  if (autoCopy) autoCopy.onchange = saveSettings;
-  if (dateFormat) dateFormat.onchange = saveSettings;
+  if (autoPreview) autoPreview.addEventListener('change', saveSettings);
+  if (autoCopy) autoCopy.addEventListener('change', saveSettings);
+  if (dateFormat) dateFormat.addEventListener('change', saveSettings);
   
   // Danger Zone
   const resetTemplatesBtn = document.getElementById('reset-templates-btn');
   const clearAllBtn = document.getElementById('clear-all-btn');
   
-  if (resetTemplatesBtn) resetTemplatesBtn.onclick = resetTemplates;
-  if (clearAllBtn) clearAllBtn.onclick = clearAllTemplates;
+  if (resetTemplatesBtn) resetTemplatesBtn.addEventListener('click', resetTemplates);
+  if (clearAllBtn) clearAllBtn.addEventListener('click', clearAllTemplates);
   
-  // Live Preview
+  // Live Preview für Template-Erstellung
   const templateName = document.getElementById('template-name');
   const templateIcon = document.getElementById('template-icon');
   const templateKey = document.getElementById('template-key');
   
-  if (templateName) templateName.oninput = updatePreview;
-  if (templateIcon) templateIcon.oninput = updatePreview;
-  if (templateKey) templateKey.oninput = updatePreview;
+  if (templateName) {
+    templateName.addEventListener('input', updatePreview);
+    templateName.addEventListener('input', (e) => {
+      const keyField = document.getElementById('template-key');
+      if (keyField && !keyField.value) {
+        const key = e.target.value
+          .toLowerCase()
+          .replace(/[^a-z0-9\s-]/g, '')
+          .replace(/\s+/g, '-')
+          .replace(/-+/g, '-')
+          .replace(/^-|-$/g, '');
+        keyField.value = key;
+      }
+    });
+  }
+  if (templateIcon) templateIcon.addEventListener('input', updatePreview);
+  if (templateKey) templateKey.addEventListener('input', updatePreview);
 }
 
 // TABS SETUP
@@ -491,12 +518,12 @@ function addField() {
   fieldDiv.innerHTML = `
     <div class="field-header">
       <span class="field-title">Feld ${fieldCounter}</span>
-      <button class="remove-field" onclick="removeField(${fieldCounter})">×</button>
+      <button class="remove-field" data-field-id="${fieldCounter}">×</button>
     </div>
     
     <div class="field-row">
-      <input type="text" placeholder="Feldname" class="field-name" oninput="updatePreview()">
-      <select class="field-type" onchange="toggleFieldOptions(${fieldCounter}); updatePreview();">
+      <input type="text" placeholder="Feldname" class="field-name">
+      <select class="field-type" data-field-id="${fieldCounter}">
         <option value="text">Text</option>
         <option value="number">Nummer</option>
         <option value="textarea">Textfeld</option>
@@ -504,22 +531,43 @@ function addField() {
       </select>
     </div>
     
-    <input type="text" placeholder="Platzhalter-Text" class="field-placeholder" oninput="updatePreview()">
+    <input type="text" placeholder="Platzhalter-Text" class="field-placeholder">
     
     <div class="field-options" id="options-${fieldCounter}">
       <label>Auswahloptionen (eine pro Zeile):</label>
-      <textarea class="field-options-text" placeholder="Option 1&#10;Option 2&#10;Option 3" oninput="updatePreview()"></textarea>
+      <textarea class="field-options-text" placeholder="Option 1&#10;Option 2&#10;Option 3"></textarea>
     </div>
     
     <div style="margin-top: 12px;">
       <label style="display: flex; align-items: center; gap: 8px; font-size: 13px;">
-        <input type="checkbox" class="field-required" onchange="updatePreview()">
+        <input type="checkbox" class="field-required">
         Pflichtfeld
       </label>
     </div>
   `;
   
   container.appendChild(fieldDiv);
+  
+  // Event Listeners für das neue Feld hinzufügen
+  const removeBtn = fieldDiv.querySelector('.remove-field');
+  const fieldType = fieldDiv.querySelector('.field-type');
+  const fieldName = fieldDiv.querySelector('.field-name');
+  const fieldPlaceholder = fieldDiv.querySelector('.field-placeholder');
+  const fieldRequired = fieldDiv.querySelector('.field-required');
+  const optionsText = fieldDiv.querySelector('.field-options-text');
+  
+  removeBtn.addEventListener('click', () => removeField(fieldCounter));
+  fieldType.addEventListener('change', () => {
+    toggleFieldOptions(fieldCounter);
+    updatePreview();
+  });
+  
+  [fieldName, fieldPlaceholder, fieldRequired, optionsText].forEach(element => {
+    if (element) {
+      const eventType = element.type === 'checkbox' ? 'change' : 'input';
+      element.addEventListener(eventType, updatePreview);
+    }
+  });
   updatePreview();
 }
 
@@ -534,13 +582,16 @@ function removeField(fieldId) {
 
 // FELD-OPTIONEN TOGGLE
 function toggleFieldOptions(fieldId) {
-  const select = document.querySelector(`[data-field-id="${fieldId}"] .field-type`);
+  const fieldDiv = document.querySelector(`[data-field-id="${fieldId}"]`);
+  const select = fieldDiv?.querySelector('.field-type');
   const options = document.getElementById(`options-${fieldId}`);
   
-  if (select.value === 'select') {
-    options.classList.add('show');
-  } else {
-    options.classList.remove('show');
+  if (select && options) {
+    if (select.value === 'select') {
+      options.classList.add('show');
+    } else {
+      options.classList.remove('show');
+    }
   }
 }
 
@@ -722,8 +773,27 @@ function editTemplate(key) {
         if (field.type === 'select' && field.options) {
           toggleFieldOptions(fieldCounter);
           const optionsText = fieldDiv.querySelector('.field-options-text');
-          if (optionsText) optionsText.value = field.options.join('\n');
+          if (optionsText) {
+            optionsText.value = field.options.join('\n');
+            optionsText.addEventListener('input', updatePreview);
+          }
         }
+        
+        // Event Listeners für das geladene Feld hinzufügen
+        const removeBtn = fieldDiv.querySelector('.remove-field');
+        const fieldTypeSelect = fieldDiv.querySelector('.field-type');
+        const fieldNameInput = fieldDiv.querySelector('.field-name');
+        const fieldPlaceholderInput = fieldDiv.querySelector('.field-placeholder');
+        const fieldRequiredInput = fieldDiv.querySelector('.field-required');
+        
+        if (removeBtn) removeBtn.addEventListener('click', () => removeField(fieldCounter));
+        if (fieldTypeSelect) fieldTypeSelect.addEventListener('change', () => {
+          toggleFieldOptions(fieldCounter);
+          updatePreview();
+        });
+        if (fieldNameInput) fieldNameInput.addEventListener('input', updatePreview);
+        if (fieldPlaceholderInput) fieldPlaceholderInput.addEventListener('input', updatePreview);
+        if (fieldRequiredInput) fieldRequiredInput.addEventListener('change', updatePreview);
       });
     }
   }
@@ -916,25 +986,5 @@ function showToast(message, type = 'success') {
     setTimeout(() => toast.remove(), 300);
   }, 3000);
 }
-
-// Template-Name zu Schlüssel konvertieren
-document.addEventListener('DOMContentLoaded', () => {
-  const templateName = document.getElementById('template-name');
-  const templateKey = document.getElementById('template-key');
-  
-  if (templateName && templateKey) {
-    templateName.addEventListener('input', (e) => {
-      if (!templateKey.value) {
-        const key = e.target.value
-          .toLowerCase()
-          .replace(/[^a-z0-9\s-]/g, '')
-          .replace(/\s+/g, '-')
-          .replace(/-+/g, '-')
-          .replace(/^-|-$/g, '');
-        templateKey.value = key;
-      }
-    });
-  }
-});
 
 console.log('✅ Enhanced Admin Panel bereit');
