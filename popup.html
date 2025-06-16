@@ -11,27 +11,37 @@
     <!-- HEADER -->
     <div class="header">
       <h1>🏥 Salon Templates</h1>
-      <div class="version">Admin Panel v2.0</div>
+      <div class="version">Admin Panel v2.0 Enhanced</div>
     </div>
 
     <!-- NAVIGATION -->
     <div class="nav-tabs">
-      <button class="tab-btn active" data-tab="templates">📝 Templates</button>
+      <button class="tab-btn active" data-tab="templates">📊 Übersicht</button>
       <button class="tab-btn" data-tab="create">➕ Erstellen</button>
       <button class="tab-btn" data-tab="settings">⚙️ Einstellungen</button>
     </div>
 
-    <!-- TAB: TEMPLATES VERWALTEN -->
+    <!-- TAB: TEMPLATES ÜBERSICHT -->
     <div id="templates-tab" class="tab-content active">
+      <!-- Template Statistiken -->
       <div class="section">
-        <h3>Vorhandene Templates</h3>
-        <div id="templates-list" class="templates-grid">
+        <h3>Template Statistiken</h3>
+        <div id="templates-overview">
+          <!-- Wird dynamisch gefüllt -->
+        </div>
+      </div>
+
+      <!-- Template Liste -->
+      <div class="section">
+        <h3>Alle Templates</h3>
+        <div id="templates-list" class="templates-container">
           <!-- Wird dynamisch gefüllt -->
         </div>
       </div>
       
+      <!-- Import/Export -->
       <div class="section">
-        <h3>Import/Export</h3>
+        <h3>Daten-Management</h3>
         <div class="import-export">
           <button id="export-btn" class="btn btn-secondary">📤 Templates exportieren</button>
           <div class="file-input-wrapper">
@@ -45,11 +55,11 @@
     <!-- TAB: NEUES TEMPLATE ERSTELLEN -->
     <div id="create-tab" class="tab-content">
       <div class="section">
-        <h3>Neues Template erstellen</h3>
+        <h3>Template erstellen/bearbeiten</h3>
         
         <div class="form-group">
           <label>Template Name:</label>
-          <input type="text" id="template-name" placeholder="z.B. Meine Behandlung">
+          <input type="text" id="template-name" placeholder="z.B. Meine Spezialbehandlung">
         </div>
         
         <div class="form-group">
@@ -59,7 +69,10 @@
         
         <div class="form-group">
           <label>Template-Schlüssel (eindeutig):</label>
-          <input type="text" id="template-key" placeholder="meine-behandlung">
+          <input type="text" id="template-key" placeholder="meine-spezialbehandlung">
+          <small style="color: #6a737d; font-size: 12px; margin-top: 4px; display: block;">
+            Nur Kleinbuchstaben, Zahlen, Bindestriche und Unterstriche erlaubt
+          </small>
         </div>
         
         <div class="section">
@@ -71,7 +84,7 @@
         </div>
         
         <div class="form-group">
-          <h4>Vorschau:</h4>
+          <h4>Live-Vorschau:</h4>
           <div id="template-preview" class="preview-box">
             <em>Vorschau erscheint hier...</em>
           </div>
@@ -92,35 +105,55 @@
         <div class="setting-item">
           <label class="checkbox-label">
             <input type="checkbox" id="auto-preview">
-            <span class="checkmark"></span>
             Live-Vorschau aktivieren
           </label>
+          <small style="color: #6a737d; font-size: 12px; margin-top: 4px; display: block;">
+            Zeigt sofort eine Vorschau während der Eingabe an
+          </small>
         </div>
         
         <div class="setting-item">
           <label class="checkbox-label">
             <input type="checkbox" id="auto-copy">
-            <span class="checkmark"></span>
             Automatisch in Zwischenspeicher kopieren
           </label>
+          <small style="color: #6a737d; font-size: 12px; margin-top: 4px; display: block;">
+            Kopiert den Text automatisch beim Generieren
+          </small>
         </div>
         
-        <div class="form-group">
-          <label>Standard-Datumformat:</label>
-          <select id="date-format">
-            <option value="de-DE">DD.MM.YYYY (Deutsch)</option>
-            <option value="en-US">MM/DD/YYYY (US)</option>
-            <option value="iso">YYYY-MM-DD (ISO)</option>
-          </select>
+        <div class="setting-item">
+          <div class="form-group">
+            <label>Standard-Datumformat:</label>
+            <select id="date-format">
+              <option value="de-DE">DD.MM.YYYY (Deutsch)</option>
+              <option value="en-US">MM/DD/YYYY (US)</option>
+              <option value="iso">YYYY-MM-DD (ISO)</option>
+            </select>
+          </div>
         </div>
       </div>
       
       <div class="section">
-        <h3>Daten-Management</h3>
+        <h3>Template-Verwaltung</h3>
+        
+        <div style="background: #f8f9fa; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
+          <h4 style="margin-top: 0; color: #1a1a1a;">💡 Hinweise zur Template-Bearbeitung</h4>
+          <ul style="color: #6a737d; font-size: 14px; line-height: 1.5; margin: 0; padding-left: 20px;">
+            <li><strong>Standard-Templates</strong> können bearbeitet, aber nicht gelöscht werden</li>
+            <li><strong>Benutzerdefinierte Templates</strong> können vollständig verwaltet werden</li>
+            <li>Änderungen werden automatisch in der Extension übernommen</li>
+            <li>Regelmäßige Backups über Export empfohlen</li>
+          </ul>
+        </div>
+        
         <div class="danger-zone">
-          <h4>⚠️ Danger Zone</h4>
-          <button id="reset-templates-btn" class="btn btn-danger">🔄 Auf Standard zurücksetzen</button>
-          <button id="clear-all-btn" class="btn btn-danger">🗑️ Alle Templates löschen</button>
+          <h4>⚠️ Gefährliche Aktionen</h4>
+          <p style="color: #6a737d; font-size: 14px; margin-bottom: 20px;">
+            Diese Aktionen können nicht rückgängig gemacht werden. Erstellen Sie vorher ein Backup!
+          </p>
+          <button id="reset-templates-btn" class="btn btn-danger">🔄 Benutzerdefinierte Templates löschen</button>
+          <button id="clear-all-btn" class="btn btn-danger">🗑️ Alle Daten löschen</button>
         </div>
       </div>
 
@@ -128,9 +161,23 @@
         <h3>Über diese Extension</h3>
         <div class="about">
           <p><strong>Salon Templates Advanced</strong></p>
-          <p>Version: 2.0</p>
-          <p>Entwickelt für salonkee.at</p>
-          <p>Features: Individuelle Templates, Admin-Panel, Import/Export</p>
+          <p><strong>Version:</strong> 2.0 Enhanced</p>
+          <p><strong>Entwickelt für:</strong> salonkee.at</p>
+          <p><strong>Features:</strong> 15+ Templates, Admin-Panel, Import/Export, Live-Vorschau</p>
+          <p><strong>Templates verfügbar:</strong></p>
+          <ul style="margin: 8px 0; padding-left: 20px;">
+            <li>🔍 Hautanalyse (19 Felder)</li>
+            <li>💪 Bodyanalyse (17 Felder)</li>
+            <li>⚡ Laser-Haarentfernung (14 Zonen)</li>
+            <li>💧 HydraFacial, 📍 Microneedling, ✨ IS Clinical</li>
+            <li>🔥 Forma, 💨 JetPeel, 👑 QMS Facial</li>
+            <li>🧪 Chemisches Peeling, 💄 Permanent Makeup</li>
+            <li>🌊 Lymphdrainage, 📚 Study & Glow</li>
+            <li>💪 Body FX / EvolveX</li>
+          </ul>
+          <p style="margin-top: 16px; font-size: 12px; color: #999;">
+            Diese Extension ist nicht offiziell von Salonkee endorsiert.
+          </p>
         </div>
       </div>
     </div>
