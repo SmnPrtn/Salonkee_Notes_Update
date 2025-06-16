@@ -42,6 +42,54 @@ function getDefaultTemplates() {
         'Gesicht komplett'
       ]
     },
+    'hautanalyse': {
+      name: 'Hautanalyse',
+      icon: '🔍',
+      fields: [
+        { name: 'Hauttyp', type: 'select', options: ['Normal', 'Trocken', 'Ölig', 'Mischhaut', 'Empfindlich', 'Reif'] },
+        { name: 'Hautzustand aktuell', type: 'select', options: ['Gut', 'Gestresst', 'Dehydriert', 'Gereizt', 'Normal'] },
+        { name: 'Problemzonen', type: 'text', placeholder: 'z.B. T-Zone, Wangen, Kinn, Stirn' },
+        { name: 'Unreinheiten', type: 'select', options: ['Keine', 'Mitesser', 'Pickel', 'Unterlagerungen', 'Akne', 'Mischart'] },
+        { name: 'Pigmentierung', type: 'select', options: ['Keine', 'Altersflecken', 'Aknenarben', 'Melasma', 'Sonstige'] },
+        { name: 'Hautalterung', type: 'select', options: ['Keine', 'Feine Linien', 'Tiefe Falten', 'Elastizitätsverlust'] },
+        { name: 'Poren', type: 'select', options: ['Fein', 'Normal', 'Vergrößert', 'Verstopft'] },
+        { name: 'Rötungen/Couperose', type: 'text', placeholder: 'Beschreibung falls vorhanden' },
+        { name: 'Bisherige Pflegeroutine', type: 'textarea', placeholder: 'Aktuelle Routine morgens/abends' },
+        { name: 'Aktuell verwendete Produkte', type: 'textarea', placeholder: 'Marken und Produktnamen' },
+        { name: 'Allergien/Unverträglichkeiten', type: 'text', placeholder: 'Bekannte Allergien oder Unverträglichkeiten' },
+        { name: 'Medikamente (hautrelevant)', type: 'text', placeholder: 'Isotretinoin, Blutverdünner, etc.' },
+        { name: 'UV-Schutz', type: 'select', options: ['Täglich', 'Gelegentlich', 'Nie'] },
+        { name: 'Behandlungshistorie', type: 'textarea', placeholder: 'Frühere Gesichtsbehandlungen, Peelings, etc.' },
+        { name: 'Hauptprobleme/Wünsche', type: 'textarea', placeholder: 'Was soll verbessert werden?' },
+        { name: 'Heimpflege-Empfehlung', type: 'textarea', placeholder: 'Empfohlene Routine und Produkte' },
+        { name: 'Behandlungsvorschlag', type: 'textarea', placeholder: 'Vorgeschlagene Behandlung und Lösung' },
+        { name: 'Einverständniserklärung & Gesundheitsfragen geklärt', type: 'select', options: ['Ja', 'Nein'], required: true },
+        { name: 'Behandelnde Mitarbeiterin', type: 'select', options: ['Alina', 'Elena', 'Kathrin', 'Pia'], required: true }
+      ]
+    },
+    'bodyanalyse': {
+      name: 'Bodyanalyse',
+      icon: '💪',
+      fields: [
+        { name: 'Behandlungsbereich(e)', type: 'text', placeholder: 'z.B. Bauch, Oberschenkel, Oberarme, Po' },
+        { name: 'Hauptproblemzone', type: 'text', placeholder: 'Welche Zone ist am problematischsten?' },
+        { name: 'Behandlungsziel', type: 'textarea', placeholder: 'Cellulite-Reduktion, Straffung, Konturierung, etc.' },
+        { name: 'Cellulite-Grad', type: 'select', options: ['Keiner sichtbar', 'Grad 1 (nur beim Kneifen)', 'Grad 2 (im Stehen sichtbar)', 'Grad 3 (auch im Liegen sichtbar)', 'Grad 4 (sehr ausgeprägt)'] },
+        { name: 'Hautbeschaffenheit', type: 'select', options: ['Straff', 'Normal', 'Schlaff', 'Sehr schlaff'] },
+        { name: 'Hautelastizität', type: 'select', options: ['Gut', 'Mäßig', 'Schlecht'] },
+        { name: 'Umfänge Vorher', type: 'textarea', placeholder: 'z.B. Bauch: 85cm, Oberschenkel rechts: 58cm, links: 59cm' },
+        { name: 'Vorbehandlungen', type: 'textarea', placeholder: 'Andere Körperbehandlungen, OPs, Fettabsaugung, etc.' },
+        { name: 'Sport/Bewegung', type: 'text', placeholder: 'Häufigkeit und Art der sportlichen Aktivität' },
+        { name: 'Wasserkonsum', type: 'select', options: ['Unter 1L täglich', '1-2L täglich', 'Über 2L täglich'] },
+        { name: 'Medikamente/Blutverdünner', type: 'text', placeholder: 'Falls ja, welche?' },
+        { name: 'Behandlungsplan', type: 'textarea', placeholder: 'Empfohlene Anzahl Sitzungen, Intervalle' },
+        { name: 'Intensität Start', type: 'select', options: ['Niedrig', 'Mittel', 'Hoch'] },
+        { name: 'Empfohlene Nachsorge', type: 'textarea', placeholder: 'Lymphdrainage, Sport, Ernährung, etc.' },
+        { name: 'Vorher-Bilder gemacht', type: 'select', options: ['Ja', 'Nein'], required: true },
+        { name: 'Einverständniserklärung & Gesundheitsfragen geklärt', type: 'select', options: ['Ja', 'Nein'], required: true },
+        { name: 'Behandelnde Mitarbeiterin', type: 'select', options: ['Alina', 'Elena', 'Kathrin', 'Pia'], required: true }
+      ]
+    },
     'hydrafacial': {
       name: 'HydraFacial',
       icon: '💧',
@@ -116,13 +164,18 @@ function getDefaultTemplates() {
       name: 'Forma Thermolifting',
       icon: '🔥',
       zones: [
-        'Gesicht',
+        'Gesicht komplett',
+        'Stirn', 
+        'Wangen',
+        'Kinn/Jawline',
         'Hals',
         'Dekolleté',
-        'Handrücken',
-        'Unterseite der Oberarme',
-        'Unterbauch',
-        'Kniebereich'
+        'Bauch',
+        'Oberschenkel', 
+        'Unterschenkel',
+        'Arme',
+        'Rücken',
+        'Brust'
       ],
       fields: [
         { name: 'Verträglichkeit', type: 'select', options: ['Sehr gut', 'Gut', 'Empfindlich'] },
@@ -424,67 +477,8 @@ function loadTemplateContent() {
       </div>
     `;
     
-  } else if (select.value === 'forma') {
-    // FORMA SPEZIELL - NEUE ZONEN UND RADIOFREQUENZ/TEMPERATUR
-    container.innerHTML = `
-      <div style="margin-bottom: 20px;">
-        <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #333;">Zusatzinfo:</label>
-        <input type="text" id="zusatzinfo" placeholder="z.B. 'Kurbehandlung 3/6'" 
-               style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; box-sizing: border-box;">
-      </div>
-      
-      <div style="margin-bottom: 15px;">
-        <h4 style="margin: 0 0 15px 0; color: #667eea; font-size: 16px; display: flex; align-items: center;">
-          🔥 Behandelte Zonen
-        </h4>
-        <div id="zones-container">
-          ${template.zones.map(zone => `
-            <div class="zone-item" style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; margin-bottom: 12px; padding: 15px;">
-              <h5 style="margin: 0 0 12px 0; color: #333; font-size: 14px; font-weight: 600; border-bottom: 1px solid #ddd; padding-bottom: 8px;">${zone}:</h5>
-              <input type="text" placeholder="z.B. 40% / 42°C oder Level 6 / 43°C" class="forma-input" data-zone="${zone}"
-                     style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; box-sizing: border-box;">
-            </div>
-          `).join('')}
-        </div>
-      </div>
-      
-      <div style="margin-bottom: 15px;">
-        <h4 style="margin: 0 0 15px 0; color: #667eea; font-size: 16px;">📋 Weitere Angaben</h4>
-        ${template.fields.map((field, index) => {
-          const requiredLabel = field.required ? ' <span style="color: red;">*</span>' : '';
-          const requiredAttr = field.required ? ' required' : '';
-          
-          if (field.type === 'select') {
-            return `
-              <div style="margin-bottom: 15px;">
-                <label style="display: block; margin-bottom: 6px; font-weight: 500; color: #333; font-size: 14px;">${field.name}:${requiredLabel}</label>
-                <select data-field="${index}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;"${requiredAttr}>
-                  <option value="">-- Auswählen --</option>
-                  ${field.options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
-                </select>
-              </div>
-            `;
-          } else if (field.type === 'textarea') {
-            return `
-              <div style="margin-bottom: 15px;">
-                <label style="display: block; margin-bottom: 6px; font-weight: 500; color: #333; font-size: 14px;">${field.name}:${requiredLabel}</label>
-                <textarea data-field="${index}" placeholder="${field.placeholder}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; min-height: 60px; resize: vertical; box-sizing: border-box;"${requiredAttr}></textarea>
-              </div>
-            `;
-          } else {
-            return `
-              <div style="margin-bottom: 15px;">
-                <label style="display: block; margin-bottom: 6px; font-weight: 500; color: #333; font-size: 14px;">${field.name}:${requiredLabel}</label>
-                <input type="${field.type}" data-field="${index}" placeholder="${field.placeholder}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; box-sizing: border-box;"${requiredAttr}>
-              </div>
-            `;
-          }
-        }).join('')}
-      </div>
-    `;
-    
   } else {
-    // ANDERE TEMPLATES (Standard-Felder)
+    // ANDERE TEMPLATES (Standard-Felder) - inkl. Hautanalyse und Bodyanalyse
     container.innerHTML = `
       <div style="margin-bottom: 20px;">
         <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #333;">Zusatzinfo:</label>
@@ -626,14 +620,20 @@ function updatePreview() {
       result = `Forma Thermolifting - ${dateToUse}\n`;
     }
     
-    // FORMA ZONEN DURCHGEHEN (Radiofrequenz/Temperatur)
+    // FORMA ZONEN DURCHGEHEN
     let hasContent = false;
     template.zones.forEach(zone => {
       const formaInput = document.querySelector(`.forma-input[data-zone="${zone}"]`);
-      const werte = formaInput ? formaInput.value.trim() : '';
+      const anmerkungenInput = document.querySelector(`.forma-anmerkungen-input[data-zone="${zone}"]`);
       
-      if (werte) {
-        result += `• ${zone}: ${werte}\n`;
+      const intensitaet = formaInput ? formaInput.value.trim() : '';
+      const anmerkungen = anmerkungenInput ? anmerkungenInput.value.trim() : '';
+      
+      if (intensitaet || anmerkungen) {
+        result += `• ${zone}:`;
+        if (intensitaet) result += ` ${intensitaet}`;
+        if (anmerkungen) result += ` (${anmerkungen})`;
+        result += `\n`;
         hasContent = true;
       }
     });
@@ -659,7 +659,7 @@ function updatePreview() {
     }
     
   } else {
-    // STANDARD TEMPLATES
+    // STANDARD TEMPLATES (inkl. Hautanalyse und Bodyanalyse)
     const zusatzinfo = document.getElementById('zusatzinfo').value.trim();
     let result;
     
@@ -787,7 +787,7 @@ function validateRequiredFields() {
       }
     });
   } else {
-    // Standard-Template Pflichtfelder
+    // Standard-Template Pflichtfelder (inkl. Hautanalyse und Bodyanalyse)
     const template = currentTemplates[select.value];
     template.fields.forEach((field, index) => {
       if (field.required) {
