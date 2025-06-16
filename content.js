@@ -269,27 +269,32 @@ function injectButton() {
   button.innerHTML = '📝 Behandlungsnotizen';
   
   button.style.cssText = `
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #1a1a1a;
     color: white;
     border: none;
-    padding: 10px 16px;
+    padding: 12px 20px;
     margin: 8px 4px;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 14px;
     font-weight: 500;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: all 0.2s ease;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    transition: all 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
   `;
   
   button.addEventListener('mouseenter', () => {
+    button.style.background = '#000';
     button.style.transform = 'translateY(-1px)';
-    button.style.boxShadow = '0 4px 8px rgba(0,0,0,0.15)';
+    button.style.boxShadow = '0 4px 16px rgba(0,0,0,0.2)';
   });
   
   button.addEventListener('mouseleave', () => {
+    button.style.background = '#1a1a1a';
     button.style.transform = 'translateY(0)';
-    button.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+    button.style.boxShadow = 'none';
   });
   
   button.addEventListener('click', openModal);
@@ -310,7 +315,8 @@ function openModal() {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
     z-index: 100000;
     display: flex;
     align-items: center;
@@ -322,25 +328,26 @@ function openModal() {
   const modal = document.createElement('div');
   modal.style.cssText = `
     background: white;
-    border-radius: 12px;
+    border-radius: 16px;
     width: 100%;
-    max-width: 500px;
+    max-width: 520px;
     max-height: 90vh;
     overflow: hidden;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    box-shadow: 0 24px 48px rgba(0,0,0,0.2);
     position: relative;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   `;
   
   modal.innerHTML = `
-    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center;">
-      <h3 style="margin: 0; font-size: 18px;">🏥 Behandlungsnotizen</h3>
-      <button id="close-modal" style="background: rgba(255,255,255,0.2); border: none; color: white; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 16px;">✕</button>
+    <div style="background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); color: white; padding: 24px; display: flex; justify-content: space-between; align-items: center;">
+      <h3 style="margin: 0; font-size: 18px; font-weight: 600; letter-spacing: -0.01em;">🏥 Behandlungsnotizen</h3>
+      <button id="close-modal" style="background: rgba(255,255,255,0.1); border: none; color: white; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 14px; transition: all 0.15s ease; display: flex; align-items: center; justify-content: center;">✕</button>
     </div>
     
-    <div style="padding: 20px; max-height: 60vh; overflow-y: auto;">
-      <div style="margin-bottom: 20px;">
-        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">Behandlung auswählen:</label>
-        <select id="template-select" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+    <div style="padding: 24px; max-height: 60vh; overflow-y: auto;">
+      <div style="margin-bottom: 24px;">
+        <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #1a1a1a; font-size: 14px;">Behandlung auswählen:</label>
+        <select id="template-select" style="width: 100%; padding: 12px 16px; border: 1px solid #d1d5da; border-radius: 8px; font-size: 14px; background: white; transition: all 0.15s ease;">
           <option value="">-- Vorlage wählen --</option>
           ${Object.entries(currentTemplates).map(([key, template]) => 
             `<option value="${key}">${template.icon} ${template.name}</option>`
@@ -348,24 +355,24 @@ function openModal() {
         </select>
       </div>
       
-      <div id="custom-date-section" style="display: none; margin-bottom: 20px; background: #f8f9fa; padding: 15px; border-radius: 6px; border: 1px solid #e9ecef;">
-        <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #333; font-size: 14px;">📅 Individuelles Datum (optional):</label>
-        <input type="date" id="custom-date" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; box-sizing: border-box;">
-        <small style="color: #666; font-size: 12px; margin-top: 5px; display: block;">Leer lassen für heutiges Datum</small>
+      <div id="custom-date-section" style="display: none; margin-bottom: 24px; background: #f8f9fa; padding: 16px; border-radius: 12px; border: 1px solid #e1e4e8;">
+        <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #1a1a1a; font-size: 14px;">📅 Individuelles Datum (optional):</label>
+        <input type="date" id="custom-date" style="width: 100%; padding: 12px 16px; border: 1px solid #d1d5da; border-radius: 8px; font-size: 14px; box-sizing: border-box; background: white;">
+        <small style="color: #6a737d; font-size: 12px; margin-top: 6px; display: block;">Leer lassen für heutiges Datum</small>
       </div>
       
       <div id="template-content"></div>
       
-      <div id="preview-section" style="display: none; background: #f8f9fa; padding: 15px; border-radius: 6px; margin-top: 20px;">
-        <h4 style="margin: 0 0 10px 0; color: #666; font-size: 14px;">📄 Vorschau:</h4>
-        <pre id="preview-text" style="background: white; padding: 12px; border-radius: 4px; font-size: 12px; margin: 0; white-space: pre-wrap; max-height: 150px; overflow-y: auto;"></pre>
+      <div id="preview-section" style="display: none; background: #f8f9fa; padding: 16px; border-radius: 12px; margin-top: 24px; border: 1px solid #e1e4e8;">
+        <h4 style="margin: 0 0 12px 0; color: #6a737d; font-size: 14px; font-weight: 500;">📄 Vorschau:</h4>
+        <pre id="preview-text" style="background: white; padding: 16px; border-radius: 8px; font-size: 12px; margin: 0; white-space: pre-wrap; max-height: 200px; overflow-y: auto; font-family: ui-monospace, 'SF Mono', Monaco, monospace; line-height: 1.4; color: #424242; border: 1px solid #e1e4e8;"></pre>
       </div>
     </div>
     
-    <div style="padding: 20px; border-top: 1px solid #e9ecef; display: flex; gap: 12px;" id="modal-buttons">
-      <button id="copy-btn" style="flex: 1; background: #28a745; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-size: 14px; display: none;" disabled>📋 Kopieren</button>
-      <button id="insert-btn" style="flex: 1; background: #667eea; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-size: 14px; display: none;" disabled>➕ Einfügen</button>
-      <button id="reset-btn" style="background: #6c757d; color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-size: 14px; display: none;">🔄 Neu</button>
+    <div style="padding: 24px; border-top: 1px solid #e1e4e8; display: flex; gap: 12px; background: #fafbfc;" id="modal-buttons">
+      <button id="copy-btn" style="flex: 1; background: #059669; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 500; display: none; transition: all 0.15s ease;" disabled>📋 Kopieren</button>
+      <button id="insert-btn" style="flex: 1; background: #1a1a1a; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 500; display: none; transition: all 0.15s ease;" disabled>➕ Einfügen</button>
+      <button id="reset-btn" style="background: #6a737d; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 500; display: none; transition: all 0.15s ease;">🔄 Neu</button>
     </div>
   `;
   
@@ -383,6 +390,33 @@ function setupModalEvents() {
   const insertBtn = document.getElementById('insert-btn');
   const resetBtn = document.getElementById('reset-btn');
   const customDate = document.getElementById('custom-date');
+  
+  // Hover effects für buttons
+  const buttons = [copyBtn, insertBtn, resetBtn, closeBtn];
+  buttons.forEach(btn => {
+    if (btn) {
+      btn.addEventListener('mouseenter', () => {
+        if (!btn.disabled) {
+          btn.style.transform = 'translateY(-1px)';
+          btn.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+        }
+      });
+      btn.addEventListener('mouseleave', () => {
+        btn.style.transform = 'translateY(0)';
+        btn.style.boxShadow = 'none';
+      });
+    }
+  });
+  
+  // Focus styles für select
+  templateSelect.addEventListener('focus', () => {
+    templateSelect.style.borderColor = '#0366d6';
+    templateSelect.style.boxShadow = '0 0 0 3px rgba(3, 102, 214, 0.1)';
+  });
+  templateSelect.addEventListener('blur', () => {
+    templateSelect.style.borderColor = '#d1d5da';
+    templateSelect.style.boxShadow = 'none';
+  });
   
   closeBtn.onclick = closeModal;
   backdrop.onclick = (e) => {
@@ -425,49 +459,49 @@ function loadTemplateContent() {
   if (select.value === 'laser') {
     // LASER SPEZIELL - ALLE ZONEN OFFEN
     container.innerHTML = `
-      <div style="margin-bottom: 20px;">
-        <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #333;">Zusatzinfo:</label>
+      <div style="margin-bottom: 24px;">
+        <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #1a1a1a; font-size: 14px;">Zusatzinfo:</label>
         <input type="text" id="zusatzinfo" placeholder="z.B. 'Kurbehandlung 4/4'" 
-               style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; box-sizing: border-box;">
+               style="width: 100%; padding: 12px 16px; border: 1px solid #d1d5da; border-radius: 8px; font-size: 14px; box-sizing: border-box; background: white; transition: all 0.15s ease;">
       </div>
       
-      <div style="margin-bottom: 15px;">
-        <h4 style="margin: 0 0 15px 0; color: #667eea; font-size: 16px; display: flex; align-items: center;">
+      <div style="margin-bottom: 24px;">
+        <h4 style="margin: 0 0 16px 0; color: #1a1a1a; font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
           🎯 Behandelte Zonen
         </h4>
         <div id="zones-container">
           ${template.zones.map(zone => `
-            <div class="zone-item" style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; margin-bottom: 12px; padding: 15px;">
-              <h5 style="margin: 0 0 12px 0; color: #333; font-size: 14px; font-weight: 600; border-bottom: 1px solid #ddd; padding-bottom: 8px;">${zone}:</h5>
+            <div class="zone-item" style="background: #f8f9fa; border: 1px solid #e1e4e8; border-radius: 12px; margin-bottom: 16px; padding: 16px; transition: all 0.15s ease;">
+              <h5 style="margin: 0 0 12px 0; color: #1a1a1a; font-size: 14px; font-weight: 500; border-bottom: 1px solid #e1e4e8; padding-bottom: 8px;">${zone}:</h5>
               <input type="number" placeholder="Joule-Wert" class="joule-input" data-zone="${zone}"
-                     style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; box-sizing: border-box;">
+                     style="width: 100%; padding: 12px 16px; border: 1px solid #d1d5da; border-radius: 8px; font-size: 14px; box-sizing: border-box; background: white; transition: all 0.15s ease;">
             </div>
           `).join('')}
         </div>
       </div>
       
-      <div style="margin-bottom: 15px;">
-        <label style="display: block; margin-bottom: 6px; font-weight: 500; color: #333; font-size: 14px;">Individuelle Anmerkung:</label>
-        <input type="text" id="laser-individuelle-anmerkung" placeholder="Weitere Anmerkungen" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; box-sizing: border-box;">
+      <div style="margin-bottom: 20px;">
+        <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #1a1a1a; font-size: 14px;">Individuelle Anmerkung:</label>
+        <input type="text" id="laser-individuelle-anmerkung" placeholder="Weitere Anmerkungen" style="width: 100%; padding: 12px 16px; border: 1px solid #d1d5da; border-radius: 8px; font-size: 14px; box-sizing: border-box; background: white; transition: all 0.15s ease;">
       </div>
       
-      <div style="margin-bottom: 15px;">
-        <label style="display: block; margin-bottom: 6px; font-weight: 500; color: #333; font-size: 14px;">Kostenpunkt (Pflichtfeld!): <span style="color: red;">*</span></label>
-        <input type="text" id="laser-kostenpunkt" placeholder="z.B. 120 €" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; box-sizing: border-box;">
+      <div style="margin-bottom: 20px;">
+        <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #1a1a1a; font-size: 14px;">Kostenpunkt (Pflichtfeld!): <span style="color: #dc2626;">*</span></label>
+        <input type="text" id="laser-kostenpunkt" placeholder="z.B. 120 €" required style="width: 100%; padding: 12px 16px; border: 1px solid #d1d5da; border-radius: 8px; font-size: 14px; box-sizing: border-box; background: white; transition: all 0.15s ease;">
       </div>
       
-      <div style="margin-bottom: 15px;">
-        <label style="display: block; margin-bottom: 6px; font-weight: 500; color: #333; font-size: 14px;">Einverständniserklärung & Gesundheitsfragen geklärt:</label>
-        <select id="laser-einverstaendnis" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+      <div style="margin-bottom: 20px;">
+        <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #1a1a1a; font-size: 14px;">Einverständniserklärung & Gesundheitsfragen geklärt:</label>
+        <select id="laser-einverstaendnis" style="width: 100%; padding: 12px 16px; border: 1px solid #d1d5da; border-radius: 8px; font-size: 14px; background: white; transition: all 0.15s ease;">
           <option value="">-- Auswählen --</option>
           <option value="Ja">Ja</option>
           <option value="Nein">Nein</option>
         </select>
       </div>
       
-      <div style="margin-bottom: 15px;">
-        <label style="display: block; margin-bottom: 6px; font-weight: 500; color: #333; font-size: 14px;">Behandelnde Mitarbeiterin (Pflichtfeld!): <span style="color: red;">*</span></label>
-        <select id="laser-mitarbeiterin" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+      <div style="margin-bottom: 20px;">
+        <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #1a1a1a; font-size: 14px;">Behandelnde Mitarbeiterin (Pflichtfeld!): <span style="color: #dc2626;">*</span></label>
+        <select id="laser-mitarbeiterin" required style="width: 100%; padding: 12px 16px; border: 1px solid #d1d5da; border-radius: 8px; font-size: 14px; background: white; transition: all 0.15s ease;">
           <option value="">-- Auswählen --</option>
           <option value="Alina">Alina</option>
           <option value="Elena">Elena</option>
@@ -480,20 +514,20 @@ function loadTemplateContent() {
   } else {
     // ANDERE TEMPLATES (Standard-Felder) - inkl. Hautanalyse und Bodyanalyse
     container.innerHTML = `
-      <div style="margin-bottom: 20px;">
-        <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #333;">Zusatzinfo:</label>
+      <div style="margin-bottom: 24px;">
+        <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #1a1a1a; font-size: 14px;">Zusatzinfo:</label>
         <input type="text" id="zusatzinfo" placeholder="z.B. 'Kur 3/6', 'Nachbehandlung', etc." 
-               style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; box-sizing: border-box;">
+               style="width: 100%; padding: 12px 16px; border: 1px solid #d1d5da; border-radius: 8px; font-size: 14px; box-sizing: border-box; background: white; transition: all 0.15s ease;">
       </div>
     ` + template.fields.map((field, index) => {
-      const requiredLabel = field.required ? ' <span style="color: red;">*</span>' : '';
+      const requiredLabel = field.required ? ' <span style="color: #dc2626;">*</span>' : '';
       const requiredAttr = field.required ? ' required' : '';
       
       if (field.type === 'select') {
         return `
-          <div style="margin-bottom: 15px;">
-            <label style="display: block; margin-bottom: 6px; font-weight: 500; color: #333; font-size: 14px;">${field.name}:${requiredLabel}</label>
-            <select data-field="${index}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;"${requiredAttr}>
+          <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #1a1a1a; font-size: 14px;">${field.name}:${requiredLabel}</label>
+            <select data-field="${index}" style="width: 100%; padding: 12px 16px; border: 1px solid #d1d5da; border-radius: 8px; font-size: 14px; background: white; transition: all 0.15s ease;"${requiredAttr}>
               <option value="">-- Auswählen --</option>
               ${field.options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
             </select>
@@ -501,24 +535,33 @@ function loadTemplateContent() {
         `;
       } else if (field.type === 'textarea') {
         return `
-          <div style="margin-bottom: 15px;">
-            <label style="display: block; margin-bottom: 6px; font-weight: 500; color: #333; font-size: 14px;">${field.name}:${requiredLabel}</label>
-            <textarea data-field="${index}" placeholder="${field.placeholder}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; min-height: 60px; resize: vertical; box-sizing: border-box;"${requiredAttr}></textarea>
+          <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #1a1a1a; font-size: 14px;">${field.name}:${requiredLabel}</label>
+            <textarea data-field="${index}" placeholder="${field.placeholder}" style="width: 100%; padding: 12px 16px; border: 1px solid #d1d5da; border-radius: 8px; font-size: 14px; min-height: 80px; resize: vertical; box-sizing: border-box; background: white; transition: all 0.15s ease;"${requiredAttr}></textarea>
           </div>
         `;
       } else {
         return `
-          <div style="margin-bottom: 15px;">
-            <label style="display: block; margin-bottom: 6px; font-weight: 500; color: #333; font-size: 14px;">${field.name}:${requiredLabel}</label>
-            <input type="${field.type}" data-field="${index}" placeholder="${field.placeholder}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; box-sizing: border-box;"${requiredAttr}>
+          <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #1a1a1a; font-size: 14px;">${field.name}:${requiredLabel}</label>
+            <input type="${field.type}" data-field="${index}" placeholder="${field.placeholder}" style="width: 100%; padding: 12px 16px; border: 1px solid #d1d5da; border-radius: 8px; font-size: 14px; box-sizing: border-box; background: white; transition: all 0.15s ease;"${requiredAttr}>
           </div>
         `;
       }
     }).join('');
   }
   
-  // LIVE PREVIEW EVENT LISTENERS
+  // FOCUS STYLES für alle Inputs hinzufügen
   container.querySelectorAll('input, select, textarea').forEach(element => {
+    element.addEventListener('focus', () => {
+      element.style.borderColor = '#0366d6';
+      element.style.boxShadow = '0 0 0 3px rgba(3, 102, 214, 0.1)';
+    });
+    element.addEventListener('blur', () => {
+      element.style.borderColor = '#d1d5da';
+      element.style.boxShadow = 'none';
+    });
+    
     element.oninput = updatePreview;
     element.onchange = updatePreview;
   });
@@ -702,10 +745,10 @@ async function copyToClipboard() {
   const previewText = document.getElementById('preview-text');
   try {
     await navigator.clipboard.writeText(previewText.textContent);
-    showNotification('✅ In Zwischenspeicher kopiert!', '#28a745');
+    showNotification('✅ In Zwischenspeicher kopiert!', '#059669');
   } catch (error) {
     console.error('Copy error:', error);
-    showNotification('❌ Kopieren fehlgeschlagen', '#dc3545');
+    showNotification('❌ Kopieren fehlgeschlagen', '#dc2626');
   }
 }
 
@@ -725,7 +768,7 @@ function insertIntoTextarea() {
                    document.querySelector('input[type="text"][name*="note"]');
   
   if (!textarea) {
-    showNotification('❌ Notizfeld nicht gefunden', '#dc3545');
+    showNotification('❌ Notizfeld nicht gefunden', '#dc2626');
     return;
   }
   
@@ -750,14 +793,14 @@ function insertIntoTextarea() {
       console.log('AngularJS Integration übersprungen:', angularError.message);
     }
     
-    showNotification('✅ Text eingefügt! Modal bleibt für weitere Behandlungen offen.', '#28a745');
+    showNotification('✅ Text eingefügt! Modal bleibt für weitere Behandlungen offen.', '#059669');
     
     // FORM RESET für nächste Behandlung
     resetForm();
     
   } catch (error) {
     console.error('Insert error:', error);
-    showNotification('❌ Einfügen fehlgeschlagen', '#dc3545');
+    showNotification('❌ Einfügen fehlgeschlagen', '#dc2626');
   }
 }
 
@@ -800,7 +843,7 @@ function validateRequiredFields() {
   }
   
   if (emptyRequiredFields.length > 0) {
-    showNotification(`❌ Bitte füllen Sie folgende Pflichtfelder aus: ${emptyRequiredFields.join(', ')}`, '#dc3545');
+    showNotification(`❌ Bitte füllen Sie folgende Pflichtfelder aus: ${emptyRequiredFields.join(', ')}`, '#dc2626');
     return false;
   }
   
@@ -834,7 +877,7 @@ function resetForm() {
   insertBtn.style.display = 'none';
   resetBtn.style.display = 'none';
   
-  showNotification('🔄 Bereit für nächste Behandlung', '#6c757d');
+  showNotification('🔄 Bereit für nächste Behandlung', '#6a737d');
 }
 
 // MODAL SCHLIEßEN
@@ -860,16 +903,32 @@ function showNotification(message, color) {
     background: ${color};
     color: white;
     padding: 12px 20px;
-    border-radius: 6px;
+    border-radius: 8px;
     font-weight: 500;
     z-index: 100001;
     font-size: 14px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    min-width: 280px;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   `;
   
   notification.textContent = message;
   document.body.appendChild(notification);
-  setTimeout(() => notification.remove(), 3000);
+  
+  // Animation
+  setTimeout(() => {
+    notification.style.opacity = '1';
+    notification.style.transform = 'translateX(0)';
+  }, 100);
+  
+  setTimeout(() => {
+    notification.style.opacity = '0';
+    notification.style.transform = 'translateX(100%)';
+    setTimeout(() => notification.remove(), 300);
+  }, 3000);
 }
 
 // PERIODISCHE BUTTON-PRÜFUNG
